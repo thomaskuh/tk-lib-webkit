@@ -1,0 +1,16 @@
+tk-toasts {
+	position: fixed;
+	bottom: 0px;
+	width: 100%;
+	
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	pointer-events: none;
+	z-index: 5000;
+}
+
+tk-toast {
+	margin-bottom: 15px;
+	max-width: 100%;
+}

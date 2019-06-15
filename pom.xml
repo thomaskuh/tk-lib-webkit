@@ -1,0 +1,79 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<groupId>org.kuhlins.lib</groupId>
+	<artifactId>tk-webkit</artifactId>
+	<version>1.0-SNAPSHOT</version>	
+
+	<properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.samaxes.maven</groupId>
+				<artifactId>minify-maven-plugin</artifactId>
+				<version>1.7.6</version>
+				<executions>
+					<execution>
+						<id>minify</id>
+						<configuration>
+							<skipMinify>true</skipMinify>
+							
+							<webappSourceDir>${basedir}/src/main/resources</webappSourceDir>
+							<webappTargetDir>${basedir}/src/main/resources</webappTargetDir>
+							
+							<jsSourceDir>webkit/js</jsSourceDir>
+							<jsFinalFile>pack.js</jsFinalFile>
+							<jsSourceFiles>
+								<jsSourceFile>jquery.slim.min.js</jsSourceFile>
+								<jsSourceFile>angular.min.js</jsSourceFile>
+								<jsSourceFile>angular-sanitize.min.js</jsSourceFile>
+								<jsSourceFile>angular_1_router.js</jsSourceFile>
+								<jsSourceFile>angular-translate.min.js</jsSourceFile>
+								<jsSourceFile>angular-translate-loader-static-files.min.js</jsSourceFile>
+								<jsSourceFile>moment.min.js</jsSourceFile>
+								<jsSourceFile>toolkit.js</jsSourceFile>
+							</jsSourceFiles>
+							
+							<cssSourceDir>webkit/css</cssSourceDir>
+							<cssFinalFile>pack.css</cssFinalFile>
+							<cssSourceFiles>
+								<cssSourceFile>bulma.min.css</cssSourceFile>
+								<cssSourceFile>fontawesome.min.css</cssSourceFile>
+								<cssSourceFile>toolkit.css</cssSourceFile>
+							</cssSourceFiles>
+						</configuration>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>minify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-parent</artifactId>
+				<version>2.1.5.RELEASE</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+</project>
