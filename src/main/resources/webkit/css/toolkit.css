@@ -1,8 +1,27 @@
+/* ============= */
+/* === UTILS === */
+/* ============= */
+
+table.tk-table-actions th:last-child,
+table.tk-table-actions td:last-child {
+  text-align: right;
+}
+
+table.tk-table-middle td,
+table.tk-table-middle th {
+	vertical-align: middle;
+}
+
+
+/* ================== */
+/* === COMPONENTS === */
+/* ================== */
+
 tk-toasts {
 	position: fixed;
 	bottom: 0px;
 	width: 100%;
-	
+
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -13,4 +32,21 @@ tk-toasts {
 tk-toast {
 	margin-bottom: 15px;
 	max-width: 100%;
+}
+
+tk-login-form {
+  margin: 50px 20px 0px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+tk-login-form > .message {
+  width: 300px;
+}
+
+@media (max-width: 500px) {
+  tk-login-form > .message {
+    width: 100%;
+  }
 }

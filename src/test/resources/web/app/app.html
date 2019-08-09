@@ -3,7 +3,7 @@
     	<a class="navbar-item" ng-class="{'is-active': $ctrl.path == '/home'}" href="#/home">
     		<span tk-loading-not class="icon"><i class="fas fa-home"></i></span>
     		<span tk-loading class="icon"><i class="fas fa-spinner fa-spin"></i></span>
-    		<b>The App</b>
+    		<b>{{'GEN.TITLE'|translate}}</b>
     	</a>
 
 		<a ng-click="$ctrl.toggle()" role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
@@ -13,28 +13,28 @@
     	</a>
 	</div>
 
-	<div id="navbarBasicExample" class="navbar-menu">
-    	<div class="navbar-start">
-      		<a class="navbar-item" ng-class="{'is-active': $ctrl.path == '/test'}" href="#/test">Test</a>
-      		<div class="navbar-item has-dropdown is-hoverable">
-        		<a class="navbar-link">More</a>
-        		<div class="navbar-dropdown">
-          			<a class="navbar-item">About</a>
-					<a class="navbar-item">Jobs</a>
-					<hr class="navbar-divider">
-					<a class="navbar-item">Contact</a>
+  <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-start">
+      <a class="navbar-item" ng-class="{'is-active': $ctrl.path == '/dummy'}" href="#/dummy">Dummy 1</a>
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">More</a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item">Dummy 2</a>
+          <a class="navbar-item">Dummy 3</a>
+          <hr class="navbar-divider">
+          <a class="navbar-item">Dummy 4</a>
 				</div>
-			</div>
-		</div>
+      </div>
+    </div>
 
-		<div class="navbar-end">
-			<div class="navbar-item">
-        		<div class="buttons">
-          			<a class="button is-light">Log in</a>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="buttons">
+          <tk-login-button></tk-login-button>
+        </div>
+      </div>
+    </div>
+  </div>
 </nav>
 
 <div class="container is-fluid">

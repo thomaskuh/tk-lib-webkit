@@ -2,10 +2,13 @@ var app = tkDefaultApp();
 
 app.factory('client', ['$http', function($http) {
 	return {
-		// System
-		systemShutdown: () => $http.post('/api/system/shutdown'),
-		systemSleep: () => $http.get('/api/system/sleep'),
-		systemFail: () => $http.get('/api/system/fail'),
+		shutdown: () => $http.post('/api/shutdown'),
+		sleep: () => $http.get('/api/sleep'),
+		probe: () => $http.get('/api/probe'),
+		errorNotFound: () => $http.get('/api/errorNotFound'),
+		errorKnown: () => $http.get('/api/errorKnown'),
+		errorUnknown: () => $http.get('/api/errorUnknown'),
+		errorDetails: () => $http.get('/api/errorDetails')
 	}
 }]);
 
@@ -16,7 +19,7 @@ app.component('app', {
 	bindings: { $router: '<' },
 	$routeConfig: [
 		{path: '/home',   name: 'Home',   component: 'pageHome', useAsDefault: true},
-		{path: '/test',   name: 'Test',   component: 'pageTest'}
+		{path: '/login',  name: 'Login',   component: 'tkLoginForm'}
 	],
 	controller: function($scope, $location, $element) {
 		var ctrl = this;

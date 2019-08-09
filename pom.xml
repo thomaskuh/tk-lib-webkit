@@ -1,17 +1,42 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<groupId>org.kuhlins.lib</groupId>
 	<artifactId>tk-webkit</artifactId>
-	<version>1.0-SNAPSHOT</version>	
+	<version>1.0-SNAPSHOT</version>
 
 	<properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
 	<build>
 		<plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.1.2</version>
+        <configuration>
+          <excludes>
+            <exclude>webkit/css/bulma.css</exclude>
+            <exclude>webkit/css/fontawesome.css</exclude>
+            <exclude>webkit/css/regular.css</exclude>
+            <exclude>webkit/css/solid.css</exclude>
+            <exclude>webkit/css/toolkit.css</exclude>
+            <exclude>webkit/js/angular_1_router.js</exclude>
+            <exclude>webkit/js/angular-sanitize.min.js</exclude>
+            <exclude>webkit/js/angular-translate-loader-static-files.min.js</exclude>
+            <exclude>webkit/js/angular-translate.min.js</exclude>
+            <exclude>webkit/js/angular.min.js</exclude>
+            <exclude>webkit/js/jquery.slim.min.js</exclude>
+            <exclude>webkit/js/moment.min.js</exclude>
+            <exclude>webkit/js/toolkit.js</exclude>
+          </excludes>
+        </configuration>
+      </plugin>		  
 			<plugin>
 				<groupId>com.samaxes.maven</groupId>
 				<artifactId>minify-maven-plugin</artifactId>
@@ -21,11 +46,11 @@
 						<id>minify</id>
 						<configuration>
 							<skipMinify>true</skipMinify>
-							
-							<webappSourceDir>${basedir}/src/main/resources</webappSourceDir>
-							<webappTargetDir>${basedir}/src/main/resources</webappTargetDir>
-							
-							<jsSourceDir>webkit/js</jsSourceDir>
+
+							<webappSourceDir>${basedir}/src/main/resources/webkit</webappSourceDir>
+							<webappTargetDir>${basedir}/src/main/resources/webkit</webappTargetDir>
+
+							<jsSourceDir>js</jsSourceDir>
 							<jsFinalFile>pack.js</jsFinalFile>
 							<jsSourceFiles>
 								<jsSourceFile>jquery.slim.min.js</jsSourceFile>
@@ -37,12 +62,14 @@
 								<jsSourceFile>moment.min.js</jsSourceFile>
 								<jsSourceFile>toolkit.js</jsSourceFile>
 							</jsSourceFiles>
-							
-							<cssSourceDir>webkit/css</cssSourceDir>
+
+							<cssSourceDir>css</cssSourceDir>
 							<cssFinalFile>pack.css</cssFinalFile>
 							<cssSourceFiles>
-								<cssSourceFile>bulma.min.css</cssSourceFile>
-								<cssSourceFile>fontawesome.min.css</cssSourceFile>
+								<cssSourceFile>bulma.css</cssSourceFile>
+								<cssSourceFile>fontawesome.css</cssSourceFile>
+								<cssSourceFile>regular.css</cssSourceFile>
+								<cssSourceFile>solid.css</cssSourceFile>
 								<cssSourceFile>toolkit.css</cssSourceFile>
 							</cssSourceFiles>
 						</configuration>
@@ -55,8 +82,26 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<dependencies>
+		<!-- Optional dependencies for HttpUtils -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- Testing -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>

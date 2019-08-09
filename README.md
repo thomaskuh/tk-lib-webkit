@@ -3,7 +3,7 @@ My favorite web libraries and some own glue code bundled to quickly build webint
 
 
 ## Concept
-Get with maven -> serve from classpath -> perfectly fits spring boot -> no shitty js toolchain and package management required ;)
+Get with maven -> serve from classpath -> perfectly fits spring boot -> no shitty js toolchain and additional package management required ;)
 
 
 ## What's inside?
@@ -15,8 +15,8 @@ Get with maven -> serve from classpath -> perfectly fits spring boot -> no shitt
 | [Angular Translate](https://angular-translate.github.io/) | core, static loader | 2.18.1 | MIT |
 | [Moment.js](https://momentjs.com/) |   | 2.24.0 | MIT |
 | [Bulma](https://bulma.io/) |   | 0.7.5 | MIT |
-| [Font Awesome](https://fontawesome.com) | free edition | 5.9.0 | Font Awesome Free License |
+| [Font Awesome](https://fontawesome.com) | free edition | 5.10.1 | Font Awesome Free License |
 | Glue code |   |   | Do whatever you want |
 
 ## How to use?
-Description coming soon ... check test folders for spring boot integration and examples.
+Check test folders samples and spring boot integration.
