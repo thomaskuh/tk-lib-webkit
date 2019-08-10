@@ -254,14 +254,14 @@ myMod.component('tkLoginForm', {
 /* === UTILS === */
 /* ============= */
 
-var tkDefaultApp = function() {
+var tkDefaultApp = function(cfg) {
 	var app = angular.module('app', ['ngComponentRouter', 'pascalprecht.translate', 'ngSanitize', 'toolkit']);
-
+	
 	app.constant('tkConfig', {
-		authRouteLogin: ['Login'],  	// Route to the tk-login-form
-		authRouteAfterLogin: ['Home'],  // Route after login on unknown previous path
-		authRouteAfterLogout: ['Home'], // Route after logout
-		authUrlProbe: '/api/probe'		// Called via HTTP-GET to proof basic auth is fine
+		authRouteLogin: cfg && cfg.authRouteLogin || ['Login'],             // Route to the tk-login-form
+		authRouteAfterLogin: cfg && cfg.authRouteAfterLogin || ['Home'],    // Route after login on unknown previous path
+		authRouteAfterLogout: cfg && cfg.authRouteAfterLogout || ['Home'],  // Route after logout
+		authUrlProbe: cfg && cfg.authUrlProbe || '/api/probe'               // Called via HTTP-GET to proof basic auth is fine
 	});
 
 	app.value('$routerRootComponent', 'app');
