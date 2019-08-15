@@ -71,6 +71,36 @@ public class HttpUtils {
     }
     return result;
   }
+  
+  /**
+   * Decode base64 UTF-8 string. 
+   * @param input
+   * @return Decoded value or fallback in case of null or invalid input.
+   */
+  public static String base64Decode(String input, String defaultValue) {
+    String result = defaultValue;
+    if(input != null) {
+      try {
+        result = new String(Base64.getDecoder().decode(input), StandardCharsets.UTF_8);
+      } catch (Exception e) {/* return null/defaultValue */}
+    }
+    return result;
+  }
+  
+  /**
+   * Encode base64 UTF-8 string.
+   * @param input
+   * @return
+   */
+  public static String base64Encode(String input) {
+    String result = null;
+    if(input != null) {
+      try {
+        result = Base64.getEncoder().encodeToString(input.getBytes(StandardCharsets.UTF_8));
+      } catch (Exception e) {/* return null */}
+    }
+    return result;
+  }
 
   /**
    * Parse basic auth header.

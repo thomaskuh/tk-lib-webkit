@@ -4,7 +4,7 @@ var myMod = angular.module('toolkit', ['pascalprecht.translate']);
 /* === SERVICES === */
 /* ================ */
 
-myMod.factory('tkToastService', ['$timeout', function($timeout) {
+myMod.factory('tkToastService', ['$timeout','$translate', function($timeout, $translate) {
 	var service = {toasts: []};
 
 	/* internals */
@@ -20,14 +20,44 @@ myMod.factory('tkToastService', ['$timeout', function($timeout) {
 		return toast;
 	};
 	  
-	/* api */
+	/* api - show simple text */
 	service.info = function(messageText, detailTexts) {
 		return service.show('info', messageText, detailTexts);
 	};
-
 	service.error = function(messageText, detailTexts) {
 		return service.show('error', messageText, detailTexts);
-	};	  
+	};
+	
+	/* api - show i18n text (key+params given) */
+	service.iinfo = function(i18nKey, params) {
+    $translate(i18nKey, params).then(
+        (ok) => service.info(ok),
+        (nok) => {service.info(nok)}
+    );
+	};
+  service.ierror = function(i18nKey, params) {
+    $translate(i18nKey, params).then(
+        (ok) => service.error(ok),
+        (nok) => {service.error(nok)}
+    );
+  };
+  
+  /* api - show i18n error (tk error response data given) */
+  service.tkerror = function(responseData) {
+    $translate('ERROR.' + responseData.key, responseData.params).then(
+        (ok) => service.tkerror2(responseData, ok),
+        (nok) => service.tkerror2(responseData, nok)
+    );
+  };
+  service.tkerror2 = function(responseData, firstTranslation) {
+    var details = [];
+    if(responseData.details) {
+      responseData.details.forEach(function(detail) {
+        details.push($translate.instant('ERROR.DETAIL.' + detail.key, detail.params));
+      });
+    }
+    service.error(firstTranslation, details);
+  };
 	  
 	return service;
 }]);
@@ -82,10 +112,7 @@ myMod.factory('tkInterceptorService', function($q, $translate, $rootRouter, tkCo
     		$translate('ERROR.NETWORK').then(tkToastService.error, tkToastService.error);
     	}
     	else if(rejection.data && rejection.data.key) {
-    		$translate('ERROR.' + rejection.data.key, rejection.data.params).then(
-    				(ok) => service.onTranslation(rejection, ok),
-    				(nok) => {service.onTranslation(rejection, nok)}
-    		);
+    	  tkToastService.tkerror(rejection.data);
     	}
     	else {
     		tkToastService.error(rejection.status + " - " + rejection.statusText);	
@@ -98,22 +125,122 @@ myMod.factory('tkInterceptorService', function($q, $translate, $rootRouter, tkCo
 
     	return $q.reject(rejection);
     }
-
-    // not required atm
-    // service.requestError = function(rejection) { return $q.reject(rejection); };
-    
-    service.onTranslation = function(rejection, translation) {
-		var details = [];
-		if(rejection.data.details) {
-			rejection.data.details.forEach(function(detail) {
-				details.push($translate.instant('ERROR.DETAIL.' + detail.key, detail.params));
-			});
-		}
-		tkToastService.error(translation, details);
-    };    
-
+    // not required atm: service.requestError = function(rejection) { return $q.reject(rejection); };
 	return service;
 });
+
+myMod.factory('tkUploadService', [ '$rootScope', '$http', 'tkToastService', function($rootScope, $http, tkToastService) {
+  var service = new Object();
+  
+  /* attributes */
+  service.queue = [];
+  service.failed = [];
+  service.listener = null;
+  service.state = {'uploading': false, percent: 0, currentItem: null};
+
+  /* api */
+  service.registerListener = function(valueListener) {
+    service.listener = valueListener;
+  };
+
+  service.uploadFiles = function(valueFiles, valueURL, valueParams) {
+    if(!valueFiles || valueFiles.length == 0) return;
+    
+    valueFiles.forEach(function(vFile) {
+      var item = {file: vFile, url: valueURL, params: valueParams, error: null, errorMsg: null}
+      service.queue.push(item);
+    });
+
+    service.next();
+  };
+  
+  /* internals */
+  service.next = function() {
+    if(service.state.currentItem != null) {
+      return;
+    }
+  
+    if(service.queue.length == 0) {
+      return;
+    }
+    
+    service.state.currentItem = service.queue.shift();
+    service.state.uploading = true;
+  
+    /* Create XHR */
+    var xhr = new XMLHttpRequest();
+    
+    /* Add listeners */
+    xhr.upload.addEventListener("progress", service.uploadProgress, false);
+    xhr.addEventListener("load", service.uploadEvent, false);
+    xhr.addEventListener("error", service.uploadEvent, false);
+    xhr.addEventListener("abort", service.uploadEvent, false);
+    
+    /* Direct upload (no form multipart shit) */
+    xhr.open("POST", service.state.currentItem.url);
+    xhr.setRequestHeader("X-ul-filename", Base64.encode(service.state.currentItem.file.name));
+    if(service.state.currentItem.file.lastModified) {
+      xhr.setRequestHeader("X-ul-filetsmod", service.state.currentItem.file.lastModified);
+    }
+    if(service.state.currentItem.params != null) {
+      for(var x in service.state.currentItem.params) {
+        xhr.setRequestHeader('X-ul-' + x, service.state.currentItem.params[x]);
+      }
+    }     
+    xhr.send(service.state.currentItem.file);
+  };
+  
+  service.uploadProgress = function(evt) {
+    if (evt.lengthComputable) {
+      var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+      $rootScope.$apply(function() {
+        service.state.percent = percentComplete;
+      });
+    }
+  };
+  
+  service.uploadEvent = function(evt) {
+    // this = XMLHttpRequest
+    if(200 != this.status) {
+      var jsonResponse = {key: 'UPLOAD'};
+      try {jsonResponse = angular.fromJson(this.response)} catch (e) { /* failing whenever error isnt json */ }
+      
+      $rootScope.$apply(function() {
+        service.state.currentItem.error = jsonResponse;
+        tkToastService.tkerror(jsonResponse);
+        service.uploadDone(false);
+      });
+    }
+    else {
+      $rootScope.$apply(function() {
+        service.uploadDone(true);
+      });
+    }
+  };
+  
+  service.uploadDone = function(withSuccess) {
+    if(!withSuccess) {
+      service.failed.push(service.state.currentItem);
+    }
+    
+    service.state.currentItem = null;
+    service.state.uploading = false;
+    service.state.percent = 0;
+
+    if(service.queue.length == 0) {
+      if(service.failed.length > 0) {
+        service.failed = [];
+      }
+      if(service.listener != null) {
+        service.listener();
+      }
+    }
+
+    service.next();
+  };
+  
+  return service;
+}]);
 
 
 /* ================== */

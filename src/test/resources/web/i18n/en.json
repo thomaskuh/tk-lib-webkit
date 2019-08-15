@@ -16,6 +16,7 @@
 	},
 	"ERROR": {
 		"NETWORK": "Network error.",
+		"UPLOAD": "Upload failed.",
 		"SYSTEM": "System failure.",
 		"UNAUTHORIZED": "Unauthorized. Please log in.",
 		"FORBIDDEN": "Forbidden. Permission denied.",

@@ -33,6 +33,7 @@
             <exclude>webkit/js/angular.min.js</exclude>
             <exclude>webkit/js/jquery.slim.min.js</exclude>
             <exclude>webkit/js/moment.min.js</exclude>
+            <exclude>webkit/js/base64.min.js</exclude>
             <exclude>webkit/js/toolkit.js</exclude>
           </excludes>
         </configuration>
@@ -60,6 +61,7 @@
 								<jsSourceFile>angular-translate.min.js</jsSourceFile>
 								<jsSourceFile>angular-translate-loader-static-files.min.js</jsSourceFile>
 								<jsSourceFile>moment.min.js</jsSourceFile>
+								<jsSourceFile>base64.min.js</jsSourceFile>
 								<jsSourceFile>toolkit.js</jsSourceFile>
 							</jsSourceFiles>
 
