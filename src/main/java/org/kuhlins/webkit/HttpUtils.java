@@ -34,11 +34,16 @@ public class HttpUtils {
     // internals.
     ClientException ce = e instanceof ClientException ? (ClientException) e : new SystemException(e);
 
-    // Log system exceptions only.
+    // Always log system exceptions. In debug with stack.
     if (ce instanceof SystemException) {
-      L.warn("System exception occured. {}.", ce.getMessage(), ce);
+      L.warn("System exception occured. {}.", ce.getMessage(), L.isDebugEnabled() ? ce : null);
     }
 
+    // Log exceptions in debug.
+    if(L.isDebugEnabled()) {
+      L.warn("Passing to client: {}.", ce.getMessage());  
+    }    
+    
     // Pass to client in expected format.
     resp.setStatus(ce.getHttpCode());
     resp.setContentType("application/json");

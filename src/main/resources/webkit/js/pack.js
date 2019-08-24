@@ -3598,7 +3598,7 @@ myMod.factory('tkInterceptorService', function($q, $translate, $rootRouter, tkCo
 	return service;
 });
 
-myMod.factory('tkUploadService', [ '$rootScope', '$http', 'tkToastService', function($rootScope, $http, tkToastService) {
+myMod.factory('tkUploadService', [ '$rootScope', '$http', 'tkToastService', 'tkUserService', function($rootScope, $http, tkToastService, tkUserService) {
   var service = new Object();
   
   /* attributes */
@@ -3647,6 +3647,11 @@ myMod.factory('tkUploadService', [ '$rootScope', '$http', 'tkToastService', func
     
     /* Direct upload (no form multipart shit) */
     xhr.open("POST", service.state.currentItem.url);
+    
+    if(tkUserService.data.auth) {
+      xhr.setRequestHeader("Authorization", tkUserService.data.auth);
+    }
+
     xhr.setRequestHeader("X-ul-filename", Base64.encode(service.state.currentItem.file.name));
     if(service.state.currentItem.file.lastModified) {
       xhr.setRequestHeader("X-ul-filetsmod", service.state.currentItem.file.lastModified);
@@ -3655,7 +3660,7 @@ myMod.factory('tkUploadService', [ '$rootScope', '$http', 'tkToastService', func
       for(var x in service.state.currentItem.params) {
         xhr.setRequestHeader('X-ul-' + x, service.state.currentItem.params[x]);
       }
-    }     
+    }
     xhr.send(service.state.currentItem.file);
   };
   
