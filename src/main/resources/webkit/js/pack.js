@@ -3598,6 +3598,7 @@ myMod.factory('tkInterceptorService', function($q, $translate, $rootRouter, tkCo
 	return service;
 });
 
+
 myMod.factory('tkUploadService', [ '$rootScope', '$http', 'tkToastService', 'tkUserService', function($rootScope, $http, tkToastService, tkUserService) {
   var service = new Object();
   
@@ -3713,6 +3714,64 @@ myMod.factory('tkUploadService', [ '$rootScope', '$http', 'tkToastService', 'tkU
     service.next();
   };
   
+  // Simple version for single files or uploadables without a queue returning just a promise.
+  service.simpleUpload = function(valueUploadable, valueURL, valueParams, valueFilename, valueModified) {
+  	if(!valueUploadable) return;
+
+    return new Promise(function(myResolve, myReject) {
+	  	// Wrapper
+	  	var item = {uploadable: valueUploadable, url: valueURL, params: valueParams, filename: valueFilename, modified: valueModified};
+
+    	/* Create XHR */
+    	var xhr = new XMLHttpRequest();
+		
+    	xhr.onreadystatechange = function() {
+	    	if (xhr.readyState == XMLHttpRequest.DONE) {
+	    		if(xhr.status == 200) {
+					var jsonResponse = this.response;
+			      	try {jsonResponse = angular.fromJson(this.response)} catch (e) { /* failing whenever error isnt json */ }
+			      	$rootScope.$apply(function() {
+		    			myResolve(jsonResponse);
+		    		});
+		    	}
+		    	else {
+					var jsonResponse = {key: 'UPLOAD'};
+		      		try {jsonResponse = angular.fromJson(this.response)} catch (e) { /* failing whenever error isnt json */ }
+		      		$rootScope.$apply(function() {
+		      			tkToastService.tkerror(jsonResponse);
+						myReject(jsonResponse);
+					});
+		    	}
+	    	}
+    	};
+    	
+    	/* Direct upload (no form multipart shit) */
+    	xhr.open("POST", item.url);
+		
+	    if(tkUserService.data.auth) {
+	      xhr.setRequestHeader("Authorization", tkUserService.data.auth);
+	    }
+		
+    	xhr.setRequestHeader("X-ul-filename", Base64.encode(item.filename));
+    	
+    	if(item.modified) {
+      		xhr.setRequestHeader("X-ul-filetsmod", item.modified);
+    	}
+		if(item.params != null) {
+			for(var x in item.params) {
+        		xhr.setRequestHeader('X-ul-' + x, item.params[x]);
+      		}
+    	}
+    	xhr.send(item.uploadable);
+	});
+  };
+  
+  // Shortcut for file uploads extracting filename and modified from file.
+  service.simpleUploadFile = function(valueFile, valueURL, valueParams) {
+  	return service.simpleUpload(valueFile, valueURL, valueParams, valueFile.name, valueFile.lastModified);
+  };
+  
+  
   return service;
 }]);
 
@@ -3748,6 +3807,35 @@ myMod.directive('tkLoadingNot', function(tkInterceptorService) {
 	};
 });
 
+// Only allow regex-filtered chars on input.
+// Usage: tk-input-filter="^[0-9]*$"
+myMod.directive('tkInputFilter', function() {
+	return {
+		restrict: 'A',
+	    multiElement: true,
+	    link: function(scope, element, attrs) {
+	    	var regex = new RegExp(attrs.tkInputFilter, 'i');
+	    	var filter = function(value) {
+				return regex.test(value);
+			};
+	    	
+			["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function(event) {
+				element[0].addEventListener(event, function() {
+					if (filter(this.value)) {
+						this.oldValue = this.value;
+						this.oldSelectionStart = this.selectionStart;
+						this.oldSelectionEnd = this.selectionEnd;
+					} else if (this.hasOwnProperty("oldValue")) {
+						this.value = this.oldValue;
+						this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+					} else {
+						this.value = "";
+					}
+				});
+			});
+	    }
+	};
+});
 
 /* ================== */
 /* === COMPONENTS === */
