@@ -14,7 +14,8 @@ Get with maven -> serve from classpath -> perfectly fits spring boot -> no shitt
 | [AngularJS](https://angularjs.org/) | core, sanitize, component router | 3.4.1 | MIT |
 | [Angular Translate](https://angular-translate.github.io/) | core, static loader | 2.18.1 | MIT |
 | [Moment.js](https://momentjs.com/) |   | 2.24.0 | MIT |
-| [Bulma](https://bulma.io/) |   | 0.7.5 | MIT |
+| [Pickr](https://simonwep.github.io/pickr/) |   | 1.8.0 | MIT |
+| [Bulma](https://bulma.io/) |   | 0.9.2 | MIT |
 | [Font Awesome](https://fontawesome.com) | free edition | 5.10.1 | Font Awesome Free License |
 | Glue code |   |   | Do whatever you want |
 

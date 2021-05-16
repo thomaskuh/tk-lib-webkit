@@ -18,14 +18,43 @@
 	white-space: nowrap;
 }
 
+.tku-breakflowno {
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+/* ======================== */
+/* === BULMA EXTENSIONS === */
+/* ======================== */
+.tkb-form-center-fix {
+	align-self: center;
+	margin-bottom: 0em !important;
+	margin-right: 0.75em;
+}
+
+.tkb-titleline {
+	border-bottom-color: #363636;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+}
 
 /* ============= */
 /* === UTILS === */
 /* ============= */
 
+table.tk-table-icons th:first-child,
+table.tk-table-icons td:first-child {
+	width: 32px;
+}
+
+table.tk-table-icons2 th:first-child,
+table.tk-table-icons2 td:first-child {
+	width: 52px;
+}
+
 table.tk-table-actions th:last-child,
 table.tk-table-actions td:last-child {
-  text-align: right;
+	text-align: right;
 }
 
 table.tk-table-middle td,

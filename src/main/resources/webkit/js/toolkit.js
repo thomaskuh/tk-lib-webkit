@@ -1,5 +1,11 @@
 var myMod = angular.module('toolkit', ['pascalprecht.translate']);
 
+/* =============== */
+/* === FILTERS === */
+/* =============== */
+
+
+
 /* ================ */
 /* === SERVICES === */
 /* ================ */
@@ -59,6 +65,38 @@ myMod.factory('tkToastService', ['$timeout','$translate', function($timeout, $tr
     service.error(firstTranslation, details);
   };
 	  
+	return service;
+}]);
+
+myMod.factory('tkModalService', ['$q', '$timeout', '$compile', '$rootElement', function($q, $timeout, $compile, $rootElement) {
+	var service = {};
+	
+	service.jqElBody = $rootElement.find('body');
+
+	service.show = function(theScope, valueName, valueParams, valueClosePromise) {
+		var nuScope = theScope.$new();
+		nuScope.tkModel = {
+			name: valueName,
+			params: valueParams ? valueParams : {},	// make sure it's never undefined.
+			defProm: $q.defer(),
+			closable: !!!valueClosePromise			// can be closed by user?
+		};
+
+		var template = angular.element('<tk-modal tk-model="tkModel"></tk-modal>');
+		var element = $compile(template)(nuScope);
+		service.jqElBody.append(element);
+		
+		if(valueClosePromise) {
+			valueClosePromise.then(
+				function(result) { service.dismiss(instance); },
+				function(error) { service.dismiss(instance); }
+			);
+		}
+
+		return nuScope.tkModel.defProm.promise;
+	};
+
+	
 	return service;
 }]);
 
@@ -338,8 +376,7 @@ myMod.directive('tkLoadingNot', function(tkInterceptorService) {
 	};
 });
 
-// Only allow regex-filtered chars on input.
-// Usage: tk-input-filter="^[0-9]*$"
+// Only allow regex-filtered chars on input. Usage: tk-input-filter="^[0-9]*$".
 myMod.directive('tkInputFilter', function() {
 	return {
 		restrict: 'A',
@@ -368,6 +405,46 @@ myMod.directive('tkInputFilter', function() {
 	};
 });
 
+// Use to convert input field string to model number and vice versa.
+myMod.directive('tkConvertToNumber', function() {
+	return {
+		require: 'ngModel',
+		link: function(scope, element, attrs, ngModel) {
+			ngModel.$parsers.push(function(val) {
+				return val != null ? parseInt(val, 10) : null;
+			});
+			ngModel.$formatters.push(function(val) {
+				return val != null ? '' + val : null;
+			});
+		}
+	};
+});
+
+// Use to convert input field string to model number and vice versa with support for up/down keypresses
+myMod.directive('tkInputNumberUpDown', function($parse) {
+	return {
+		require: 'ngModel',
+		link: function(scope, element, attrs, ngModelCtrl) {
+			element.bind("keydown", function(evt) {
+				if(evt.which == 38 || evt.which == 40) {
+					var inc = evt.which == 38 ? 1 : -1;
+					ngModelCtrl.$setViewValue(parseInt(ngModelCtrl.$viewValue, 10) + inc, evt);
+					ngModelCtrl.$render();
+					evt.preventDefault();
+				}
+			});
+			
+			ngModelCtrl.$parsers.push(function(val) {
+				return val != null ? parseInt(val, 10) : null;
+			});
+			ngModelCtrl.$formatters.push(function(val) {
+				return val != null ? '' + val : null;
+			});
+		}
+	};
+});
+
+
 /* ================== */
 /* === COMPONENTS === */
 /* ================== */
@@ -393,6 +470,41 @@ myMod.component('tkToast', {
 	  controller: function() {
 		  var ctrl = this;
 	  }
+});
+
+myMod.component('tkModal', {
+	template: '\
+		<div class="modal is-active"> \
+			<div class="modal-background"></div> \
+			<div class="modal-content"></div> \
+			<button class="modal-close is-large" aria-label="close" ng-click="$ctrl.onDismiss()"></button> \
+		</div>',	
+	bindings: { tkModel: '<' },
+	controller: function($scope, $element, $compile, tkModalService) {
+		var ctrl = this;
+
+		ctrl.container = $element.find('.modal-content');
+
+		ctrl.onDismiss = function() {
+			if(ctrl.tkModel.closable) {
+				$element.remove();
+				ctrl.tkModel.defProm.reject();
+			}
+		};
+
+		ctrl.onDone = function(result) {
+			if(ctrl.tkModel.closable) {
+				$element.remove();
+				ctrl.tkModel.defProm.resolve(result);
+			}
+		};
+
+		ctrl.$onInit = function() {
+			var html = '<' + ctrl.tkModel.name + ' tk-params="$ctrl.tkModel.params" tk-dismiss="$ctrl.onDismiss()" tk-done="$ctrl.onDone(result)"></' + ctrl.tkModel.name + '>';
+			var element = $compile(html)($scope.$new());
+			ctrl.container.html(element);
+		};
+	}
 });
 
 myMod.component('tkLoginButton', {

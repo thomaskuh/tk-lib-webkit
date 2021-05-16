@@ -62,6 +62,7 @@
 								<jsSourceFile>angular-translate-loader-static-files.min.js</jsSourceFile>
 								<jsSourceFile>moment.min.js</jsSourceFile>
 								<jsSourceFile>base64.min.js</jsSourceFile>
+								<jsSourceFile>pickr.min.js</jsSourceFile>
 								<jsSourceFile>toolkit.js</jsSourceFile>
 							</jsSourceFiles>
 
@@ -72,6 +73,7 @@
 								<cssSourceFile>fontawesome.css</cssSourceFile>
 								<cssSourceFile>regular.css</cssSourceFile>
 								<cssSourceFile>solid.css</cssSourceFile>
+								<cssSourceFile>pickr.nano.min.css</cssSourceFile>
 								<cssSourceFile>toolkit.css</cssSourceFile>
 							</cssSourceFiles>
 						</configuration>
