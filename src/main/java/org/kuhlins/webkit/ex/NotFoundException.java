@@ -4,7 +4,7 @@ public class NotFoundException extends ClientException {
 
   private static final long serialVersionUID = 1L;
 
-  public static final String DEFAULT_KEY = "NOTFOUND";
+  public static final String DEFAULT_KEY = "notfound";
 
   public NotFoundException() {
     super(DEFAULT_KEY);

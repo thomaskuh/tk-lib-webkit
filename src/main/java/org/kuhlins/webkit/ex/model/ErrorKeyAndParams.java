@@ -14,7 +14,8 @@ public abstract class ErrorKeyAndParams<T> implements Serializable {
 
   protected String key;
   protected Map<String, String> params = new HashMap<String, String>();
-
+  protected String msg;
+  
   protected abstract T self();
   
   /**
@@ -38,6 +39,20 @@ public abstract class ErrorKeyAndParams<T> implements Serializable {
 
   public Map<String, String> getParams() {
     return params;
+  }
+  
+  /**
+   * Do not call. Only for (De)serialization.
+   */
+  public String getMsg() {
+	return msg;
+  }
+  
+  /**
+   * Do not call. Only for (De)serialization.
+   */
+  public void setMsg(String msg) {
+	this.msg = msg;
   }
   
   /**

@@ -4,7 +4,7 @@ public class UnauthorizedException extends ClientException {
 
   private static final long serialVersionUID = 1L;
 
-  public static final String DEFAULT_KEY = "UNAUTHORIZED";
+  public static final String DEFAULT_KEY = "sec.unauthorized";
   
   public UnauthorizedException() {
     super(DEFAULT_KEY);

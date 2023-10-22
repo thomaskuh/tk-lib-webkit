@@ -1,55 +1,15 @@
 package org.kuhlins.webkit;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.kuhlins.webkit.ex.ClientException;
-import org.kuhlins.webkit.ex.SystemException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * HTTP utils for library related tasks like exception handling and common tasks
  * i dont want to depend on a large library just because of a single method.
  */
 public class HttpUtils {
-
-  private static final Logger L = LoggerFactory.getLogger(HttpUtils.class);
-
-  private static final ObjectMapper mapper = new ObjectMapper();
-
-  public static void handleException(Exception e, HttpServletResponse resp) throws IOException {
-    // Pass-through IOExceptions.
-    if (e instanceof IOException) {
-      throw (IOException) e;
-    }
-
-    // Convert unknown/unexpected exceptions to SystemException to not leak
-    // internals.
-    ClientException ce = e instanceof ClientException ? (ClientException) e : new SystemException(e);
-
-    // Always log system exceptions. In debug with stack.
-    if (ce instanceof SystemException) {
-      L.warn("System exception occured. {}.", ce.getMessage(), L.isDebugEnabled() ? ce : null);
-    }
-
-    // Log exceptions in debug.
-    if(L.isDebugEnabled()) {
-      L.warn("Passing to client: {}.", ce.getMessage());  
-    }    
-    
-    // Pass to client in expected format.
-    resp.setStatus(ce.getHttpCode());
-    resp.setContentType("application/json");
-    resp.setCharacterEncoding("UTF-8");
-    mapper.writeValue(resp.getOutputStream(), ce.getErrorResponse());
-  }
 
   /**
    * Get remote address out of request or header field when passed through reverse
@@ -154,4 +114,6 @@ public class HttpUtils {
       this.pass = pass;
     }
   }
+
+  
 }

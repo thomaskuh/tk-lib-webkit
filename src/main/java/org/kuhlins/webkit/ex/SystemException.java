@@ -4,7 +4,7 @@ public class SystemException extends ClientException {
 
   private static final long serialVersionUID = 1L;
 
-  public static final String DEFAULT_KEY = "SYSTEM";
+  public static final String DEFAULT_KEY = "sys";
 
   public SystemException() {
     super(DEFAULT_KEY);
