@@ -50,7 +50,7 @@ myMod.factory('tkToastService', ['$timeout','$translate', function($timeout, $tr
   
   /* api - show i18n error (tk error response data given) */
   service.tkerror = function(responseData) {
-    $translate('ERROR.' + responseData.key, responseData.params).then(
+    $translate('error.' + responseData.key, responseData.params).then(
         (ok) => service.tkerror2(responseData, ok),
         (nok) => service.tkerror2(responseData, nok)
     );
@@ -59,7 +59,7 @@ myMod.factory('tkToastService', ['$timeout','$translate', function($timeout, $tr
     var details = [];
     if(responseData.details) {
       responseData.details.forEach(function(detail) {
-        details.push($translate.instant('ERROR.DETAIL.' + detail.key, detail.params));
+        details.push($translate.instant('error.' + detail.key, detail.params));
       });
     }
     service.error(firstTranslation, details);
@@ -147,7 +147,7 @@ myMod.factory('tkInterceptorService', function($q, $translate, $rootRouter, tkCo
     	service.state.counter--;
 
     	if(rejection.status <= 0) {
-    		$translate('ERROR.NETWORK').then(tkToastService.error, tkToastService.error);
+    		$translate('error.net.gen').then(tkToastService.error, tkToastService.error);
     	}
     	else if(rejection.data && rejection.data.key) {
     	  tkToastService.tkerror(rejection.data);
@@ -246,7 +246,7 @@ myMod.factory('tkUploadService', [ '$rootScope', '$http', 'tkToastService', 'tkU
   service.uploadEvent = function(evt) {
     // this = XMLHttpRequest
     if(200 != this.status) {
-      var jsonResponse = {key: 'UPLOAD'};
+      var jsonResponse = {key: 'net.upload'};
       try {jsonResponse = angular.fromJson(this.response)} catch (e) { /* failing whenever error isnt json */ }
       
       $rootScope.$apply(function() {

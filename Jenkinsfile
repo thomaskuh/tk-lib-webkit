@@ -39,14 +39,14 @@ pipeline {
         	when {expression { !params.RELEASE }}        
             steps {
                 echo 'Stage "Snapshot" -> Build & Deploy.'
-                sh 'mvn clean deploy -DaltDeploymentRepository=nexus.kuhlins.org::default::https://nexus.kuhlins.org/repository/maven-public'
+                sh 'mvn clean deploy'
             }
         }
         stage('Release') {
         	when {expression { params.RELEASE }}
             steps {
             	echo 'Stage "Release" -> Build & Deploy.'
-                sh 'mvn -B release:prepare release:perform -Darguments=-DaltDeploymentRepository=nexus.kuhlins.org::default::https://nexus.kuhlins.org/repository/maven-public'
+                sh 'mvn -B release:prepare release:perform'
             }
         }
     }

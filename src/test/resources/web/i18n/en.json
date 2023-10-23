@@ -1,31 +1,41 @@
 {
-	"GEN": {
-		"TITLE": "The App",
-		"SHUTDOWN": "Shutdown"
-	},
-	"NAV": {
-		"TEST": "Test"
-	},
-	"LOGIN": {
-		"TITLE": "Login",
-		"USER": "Username",
-		"PASS": "Password",
-		"SUBMIT": "Let me in",
-		"IN": "Login",
-		"OUT": "Logout"
-	},
-	"ERROR": {
-		"NETWORK": "Network error.",
-		"UPLOAD": "Upload failed.",
-		"SYSTEM": "System failure.",
-		"UNAUTHORIZED": "Unauthorized. Please log in.",
-		"FORBIDDEN": "Forbidden. Permission denied.",
-		"NOTFOUND": "Not found.",
-		"VALIDATION": "Validation failed.",
-		"KNOWN_KEY": "Illegal value detected: {{valueReceived}}. Allowed values: {{valuesAllowed}}",
-		"WITH_DETAILS": "An error with details and mainParam {{mainParam}}",
-		"DETAIL": {
-			"DETAIL_KEY_1": "Illegal value detected: {{valueReceived}}. Allowed values: {{valuesAllowed}}"
-		}
-	}
+    "GEN": {
+        "TITLE": "The App",
+        "SHUTDOWN": "Shutdown"
+    },
+    "NAV": {
+        "TEST": "Test"
+    },
+    "LOGIN": {
+        "TITLE": "Login",
+        "USER": "Username",
+        "PASS": "Password",
+        "SUBMIT": "Let me in",
+        "IN": "Login",
+        "OUT": "Logout"
+    },
+    "error": {
+        "net": {
+            "gen": "Network error.",
+            "upload": "Upload failed."
+        },
+        "sys": {
+            "gen": "System failure."
+        },
+        "sec": {
+            "forbidden": "Forbidden. Permission denied.",
+            "unauthorized": "Unauthorized. Please log in."
+        },
+        "notfound": {
+            "gen": "Not found."
+        },
+        "val": {
+            "gen": "Validation failed.",
+            "known_key": "Illegal value detected: {{valueReceived}}. Allowed values: {{valuesAllowed}}",
+            "with_details": "An error with details and mainParam {{mainParam}}"
+        },
+        "detail": {
+            "key_1": "Illegal value detected: {{valueReceived}}. Allowed values: {{valuesAllowed}}"
+        }
+    }
 }

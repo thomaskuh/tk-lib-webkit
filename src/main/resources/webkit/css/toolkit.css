@@ -38,6 +38,10 @@
 	border-bottom-width: 1px;
 }
 
+html.has-navbar-fixed-top, body.has-navbar-fixed-top {
+    padding-top: 5rem;
+}
+
 /* ============= */
 /* === UTILS === */
 /* ============= */
