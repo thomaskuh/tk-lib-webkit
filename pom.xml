@@ -4,12 +4,12 @@
 
     <groupId>org.kuhlins.lib</groupId>
     <artifactId>tk-lib-webkit</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.2</version>
 
     <scm>
         <connection>scm:git:git://github.com/thomaskuh/tk-lib-webkit.git</connection>
         <developerConnection>scm:git:git@github.com:thomaskuh/tk-lib-webkit.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>release/0.2</tag>
         <url>https://github.com/thomaskuh/tk-lib-webkit</url>
     </scm>
 
@@ -178,15 +178,15 @@
                         <includes>
                             <include>src/**/*.json</include>
                         </includes>
-                        <gson></gson>
+                        <gson />
                     </json>
                     <java>
                         <palantirJavaFormat>
                             <version>2.38.0</version>
                             <style>PALANTIR</style>
                         </palantirJavaFormat>
-                        <removeUnusedImports></removeUnusedImports>
-                        <formatAnnotations></formatAnnotations>
+                        <removeUnusedImports />
+                        <formatAnnotations />
                     </java>
                 </configuration>
             </plugin>
