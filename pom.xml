@@ -4,12 +4,12 @@
 
     <groupId>org.kuhlins.lib</groupId>
     <artifactId>tk-lib-webkit</artifactId>
-    <version>0.2</version>
+    <version>0.3-SNAPSHOT</version>
 
     <scm>
         <connection>scm:git:git://github.com/thomaskuh/tk-lib-webkit.git</connection>
         <developerConnection>scm:git:git@github.com:thomaskuh/tk-lib-webkit.git</developerConnection>
-        <tag>release/0.2</tag>
+        <tag>HEAD</tag>
         <url>https://github.com/thomaskuh/tk-lib-webkit</url>
     </scm>
 
