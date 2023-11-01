@@ -42,6 +42,16 @@ html.has-navbar-fixed-top, body.has-navbar-fixed-top {
     padding-top: 5rem;
 }
 
+/* Fix nav dropdown close: https://github.com/jgthms/bulma/issues/2514 */
+@media screen and (min-width: 1025px) {
+    .navbar-item.is-hoverable:hover .navbar-dropdown {
+        display: block !important;
+    }
+    .navbar-item.is-hoverable:focus-within .navbar-dropdown {
+        display: none;
+    }
+}
+
 /* ============= */
 /* === UTILS === */
 /* ============= */
